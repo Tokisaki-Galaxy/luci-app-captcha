@@ -10,6 +10,7 @@ let fs = require('fs');
 
 const RATE_LIMIT_FILE = '/tmp/captcha_rate_limit.json';
 const CAPTCHA_STORE_FILE = '/tmp/captcha_store.json';
+const SECRET_MASK = '***configured***';
 
 function load_rate_limit_state() {
 	let content = fs.readfile(RATE_LIMIT_FILE);
@@ -130,9 +131,9 @@ return {
 				local_noise: settings.local_noise || '50',
 				local_case_sensitive: settings.local_case_sensitive || '0',
 				turnstile_sitekey: settings.turnstile_sitekey || '',
-				turnstile_secret: settings.turnstile_secret ? '***configured***' : '',
+				turnstile_secret: settings.turnstile_secret ? SECRET_MASK : '',
 				hcaptcha_sitekey: settings.hcaptcha_sitekey || '',
-				hcaptcha_secret: settings.hcaptcha_secret ? '***configured***' : '',
+				hcaptcha_secret: settings.hcaptcha_secret ? SECRET_MASK : '',
 				ip_whitelist_enabled: settings.ip_whitelist_enabled || '0',
 				ip_whitelist: settings.ip_whitelist || [],
 				rate_limit_enabled: settings.rate_limit_enabled || '0',
@@ -177,11 +178,11 @@ return {
 				ctx.set('captcha', 'settings', 'local_case_sensitive', req.args.local_case_sensitive);
 			if (req.args.turnstile_sitekey !== undefined)
 				ctx.set('captcha', 'settings', 'turnstile_sitekey', req.args.turnstile_sitekey);
-			if (req.args.turnstile_secret !== undefined && req.args.turnstile_secret != '***configured***')
+			if (req.args.turnstile_secret !== undefined && req.args.turnstile_secret != SECRET_MASK)
 				ctx.set('captcha', 'settings', 'turnstile_secret', req.args.turnstile_secret);
 			if (req.args.hcaptcha_sitekey !== undefined)
 				ctx.set('captcha', 'settings', 'hcaptcha_sitekey', req.args.hcaptcha_sitekey);
-			if (req.args.hcaptcha_secret !== undefined && req.args.hcaptcha_secret != '***configured***')
+			if (req.args.hcaptcha_secret !== undefined && req.args.hcaptcha_secret != SECRET_MASK)
 				ctx.set('captcha', 'settings', 'hcaptcha_secret', req.args.hcaptcha_secret);
 			if (req.args.ip_whitelist_enabled !== undefined)
 				ctx.set('captcha', 'settings', 'ip_whitelist_enabled', req.args.ip_whitelist_enabled);

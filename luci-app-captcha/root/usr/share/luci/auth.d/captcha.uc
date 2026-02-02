@@ -363,6 +363,15 @@ function verify_turnstile(token) {
 	if (!secret || secret == '')
 		return false;
 	
+	// Validate token format to prevent command injection
+	// Turnstile tokens are alphanumeric with hyphens, underscores and dots
+	if (!token || !match(token, /^[a-zA-Z0-9._-]+$/))
+		return false;
+	
+	// Validate secret format
+	if (!match(secret, /^[a-zA-Z0-9._-]+$/))
+		return false;
+	
 	// Use curl to verify with Cloudflare
 	let fd = fs.popen(sprintf(
 		"curl -s -X POST 'https://challenges.cloudflare.com/turnstile/v0/siteverify' " +
@@ -389,6 +398,15 @@ function verify_hcaptcha(token) {
 	
 	let secret = ctx.get('captcha', 'settings', 'hcaptcha_secret');
 	if (!secret || secret == '')
+		return false;
+	
+	// Validate token format to prevent command injection
+	// hCaptcha tokens are alphanumeric with hyphens, underscores and dots
+	if (!token || !match(token, /^[a-zA-Z0-9._-]+$/))
+		return false;
+	
+	// Validate secret format
+	if (!match(secret, /^[a-zA-Z0-9._-]+$/))
 		return false;
 	
 	// Use curl to verify with hCaptcha
