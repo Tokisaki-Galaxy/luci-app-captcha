@@ -1,5 +1,5 @@
 # LuCI submodule (used for development only)
-luci/
+/luci/
 
 # Dependencies
 node_modules/
