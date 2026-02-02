@@ -368,23 +368,31 @@ function verify_turnstile(token) {
 	if (!token || !match(token, /^[a-zA-Z0-9._-]+$/))
 		return false;
 	
-	// Validate secret format
+	// Validate secret format - should be alphanumeric with limited special chars
 	if (!match(secret, /^[a-zA-Z0-9._-]+$/))
 		return false;
 	
-	// Use curl to verify with Cloudflare
-	let fd = fs.popen(sprintf(
+	// Write POST data to temp file to avoid shell injection
+	let data_file = '/tmp/captcha_verify_' + time() + '.tmp';
+	let data = 'secret=' + secret + '&response=' + token;
+	fs.writefile(data_file, data);
+	
+	// Use curl with --data-binary to read from file
+	let fd = fs.popen(
 		"curl -s -X POST 'https://challenges.cloudflare.com/turnstile/v0/siteverify' " +
 		"-H 'Content-Type: application/x-www-form-urlencoded' " +
-		"-d 'secret=%s&response=%s'",
-		secret, token
-	), 'r');
+		"--data-binary '@" + data_file + "'",
+		'r'
+	);
 	
-	if (!fd)
+	let response = fd ? fd.read('all') : null;
+	if (fd) fd.close();
+	
+	// Clean up temp file
+	fs.unlink(data_file);
+	
+	if (!response)
 		return false;
-	
-	let response = fd.read('all');
-	fd.close();
 	
 	let result = json(response);
 	return result?.success == true;
@@ -405,23 +413,31 @@ function verify_hcaptcha(token) {
 	if (!token || !match(token, /^[a-zA-Z0-9._-]+$/))
 		return false;
 	
-	// Validate secret format
+	// Validate secret format - should be alphanumeric with limited special chars
 	if (!match(secret, /^[a-zA-Z0-9._-]+$/))
 		return false;
 	
-	// Use curl to verify with hCaptcha
-	let fd = fs.popen(sprintf(
+	// Write POST data to temp file to avoid shell injection
+	let data_file = '/tmp/captcha_verify_' + time() + '.tmp';
+	let data = 'secret=' + secret + '&response=' + token;
+	fs.writefile(data_file, data);
+	
+	// Use curl with --data-binary to read from file
+	let fd = fs.popen(
 		"curl -s -X POST 'https://hcaptcha.com/siteverify' " +
 		"-H 'Content-Type: application/x-www-form-urlencoded' " +
-		"-d 'secret=%s&response=%s'",
-		secret, token
-	), 'r');
+		"--data-binary '@" + data_file + "'",
+		'r'
+	);
 	
-	if (!fd)
+	let response = fd ? fd.read('all') : null;
+	if (fd) fd.close();
+	
+	// Clean up temp file
+	fs.unlink(data_file);
+	
+	if (!response)
 		return false;
-	
-	let response = fd.read('all');
-	fd.close();
 	
 	let result = json(response);
 	return result?.success == true;
