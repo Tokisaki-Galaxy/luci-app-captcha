@@ -1,0 +1,14 @@
+{
+	"admin/system/captcha": {
+		"title": "CAPTCHA Auth",
+		"order": 96,
+		"action": {
+			"type": "view",
+			"path": "system/captcha"
+		},
+		"depends": {
+			"acl": [ "luci-app-captcha" ],
+			"uci": { "captcha": true }
+		}
+	}
+}

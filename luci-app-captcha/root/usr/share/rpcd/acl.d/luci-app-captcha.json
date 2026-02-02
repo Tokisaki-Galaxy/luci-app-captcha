@@ -1,0 +1,25 @@
+{
+	"luci-app-captcha": {
+		"description": "Grant access to CAPTCHA Authentication configuration",
+		"read": {
+			"ubus": {
+				"captcha": [ "getConfig", "verifyCaptcha", "isEnabled", "checkRateLimit", "getRateLimitStatus", "generateCaptcha" ]
+			},
+			"uci": [ "captcha" ]
+		},
+		"write": {
+			"ubus": {
+				"captcha": [ "setConfig", "clearRateLimit", "clearAllRateLimits" ]
+			},
+			"uci": [ "captcha" ]
+		}
+	},
+	"unauthenticated": {
+		"description": "Grant unauthenticated access to CAPTCHA verification for login flow",
+		"read": {
+			"ubus": {
+				"captcha": [ "isEnabled", "verifyCaptcha", "checkRateLimit", "generateCaptcha" ]
+			}
+		}
+	}
+}
