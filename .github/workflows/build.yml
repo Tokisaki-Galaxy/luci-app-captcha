@@ -84,10 +84,11 @@ jobs:
           echo "Updating feeds..."
           cd ${{ env.SDK_DIR }}
           ./scripts/feeds update -a
-          ./scripts/feeds install -a || { 
-            exit_code=$?
+          ./scripts/feeds install -a
+          exit_code=$?
+          if [ $exit_code -ne 0 ]; then
             echo "::warning::feeds install exited with code $exit_code. Some feed packages may have failed to install, but this is expected and non-critical for SDK builds."
-          }
+          fi
           cd ..
 
       - name: Prepare build environment
