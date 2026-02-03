@@ -7,11 +7,10 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=luci-app-captcha
-PKG_VERSION:=1.0.0
-PKG_RELEASE:=1
 
 PKG_LICENSE:=Apache-2.0
 PKG_MAINTAINER:=Tokisaki Galaxy <moebest@outlook.jp>
+PKG_DESCRIPTION:=CAPTCHA Authentication exAuthentication module for LuCI
 
 LUCI_TITLE:=LuCI CAPTCHA Authentication
 LUCI_DEPENDS:=+luci-base
