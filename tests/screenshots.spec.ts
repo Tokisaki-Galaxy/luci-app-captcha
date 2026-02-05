@@ -31,8 +31,8 @@ test.describe('CAPTCHA Screenshots for PR', () => {
     await passwordInput.fill('password');
     await passwordInput.press('Enter');
     
-    // Wait for navigation
-    await page.waitForTimeout(3000);
+    // Wait for navigation to complete
+    await page.waitForLoadState('networkidle');
     
     // Navigate to CAPTCHA settings page
     await page.goto('/cgi-bin/luci/admin/system/captcha', { 
@@ -40,8 +40,8 @@ test.describe('CAPTCHA Screenshots for PR', () => {
       timeout: 30000 
     });
     
-    // Wait for page to fully load
-    await page.waitForTimeout(3000);
+    // Wait for page to fully render
+    await page.waitForSelector('body', { state: 'visible' });
     
     // Take screenshot
     const settingsScreenshot = path.join(screenshotsDir, '01-captcha-settings-page.png');
@@ -62,7 +62,9 @@ test.describe('CAPTCHA Screenshots for PR', () => {
     
     // Navigate to login page (CAPTCHA should be enabled via UCI)
     await page.goto('/cgi-bin/luci/', { waitUntil: 'networkidle' });
-    await page.waitForTimeout(3000);
+    
+    // Wait for login form to be visible
+    await page.waitForSelector('input[name="luci_username"]', { state: 'visible' });
     
     // Take screenshot of login page
     const loginScreenshot = path.join(screenshotsDir, '02-login-page-with-captcha.png');
@@ -86,21 +88,24 @@ test.describe('CAPTCHA Screenshots for PR', () => {
     await page.locator('input[name="luci_username"]').fill('root');
     await page.locator('input[name="luci_password"]').fill('password');
     await page.locator('input[name="luci_password"]').press('Enter');
-    await page.waitForTimeout(3000);
+    await page.waitForLoadState('networkidle');
     
     // Navigate to CAPTCHA settings
     await page.goto('/cgi-bin/luci/admin/system/captcha', { 
       waitUntil: 'networkidle',
       timeout: 30000 
     });
-    await page.waitForTimeout(3000);
+    
+    // Wait for page content
+    await page.waitForSelector('body', { state: 'visible' });
     
     // Click on "Refresh Preview" button to generate CAPTCHA
     try {
       const refreshButton = page.locator('button:has-text("Refresh Preview")');
       if (await refreshButton.isVisible()) {
         await refreshButton.click();
-        await page.waitForTimeout(2000);
+        // Wait for CAPTCHA to be generated
+        await page.waitForLoadState('networkidle');
       }
     } catch (e) {
       console.log('Note: Refresh Preview button handling');
