@@ -162,7 +162,9 @@ jobs:
           # 彻底清理旧的构建产物（包括所有子目录）
           # Thoroughly clean old build artifacts (including all subdirectories)
           echo "Cleaning old build artifacts..."
-          rm -rf ./bin/packages/*
+          if [ -d ./bin/packages ]; then
+            rm -rf ./bin/packages/*
+          fi
           mkdir -p ./bin/packages
 
       - name: Compile the package

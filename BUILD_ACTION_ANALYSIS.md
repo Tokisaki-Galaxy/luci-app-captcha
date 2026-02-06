@@ -193,6 +193,6 @@ git push origin v0.0.1
 
 ## 参考资料
 
-- OpenWrt SDK 文档：https://openwrt.org/docs/guide-developer/toolchain/using_the_sdk
-- LuCI 包开发：https://github.com/openwrt/luci/wiki/Packages
-- GitHub Actions 缓存：https://docs.github.com/en/actions/using-workflows/caching-dependencies-to-speed-up-workflows
+- OpenWrt SDK 文档: https://openwrt.org/docs/guide-developer/toolchain/using_the_sdk
+- LuCI 包开发: https://github.com/openwrt/luci/wiki/Packages
+- GitHub Actions 缓存: https://docs.github.com/en/actions/using-workflows/caching-dependencies-to-speed-up-workflows
