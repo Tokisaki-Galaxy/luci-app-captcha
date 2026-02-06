@@ -61,7 +61,7 @@ This plugin **requires the new authentication plugin mechanism** introduced in [
 
 If you are building your own LuCI, you can apply the patches from the [`luci-patch`](luci-patch/) directory, or if you have already installed [luci-app-2fa](https://github.com/Tokisaki-Galaxy/luci-app-2fa), the patches are already applied.
 
-> **⚠️ Important Prerequisites:** Before installing, you must install required packages including `ucode-mod-log`. See [INSTALLATION.md](INSTALLATION.md) for complete requirements.
+> **⚠️ Important Prerequisites:** Before installing, you must install required packages including `ucode-mod-log`.
 
 #### Manual Installation
 
@@ -167,7 +167,7 @@ CAPTCHA 设置页面允许管理员：
 
 如果你自行编译 LuCI，可以应用 [`luci-patch`](luci-patch/) 目录下的补丁文件，或者如果你已经安装了 [luci-app-2fa](https://github.com/Tokisaki-Galaxy/luci-app-2fa)，那么补丁已经被应用过了。
 
-> **⚠️ 重要前置条件：** 安装前必须先安装所需的软件包，包括 `ucode-mod-log`。详见 [INSTALLATION.md](INSTALLATION.md) 了解完整要求。
+> **⚠️ 重要前置条件：** 安装前必须先安装所需的软件包，包括 `ucode-mod-log`。
 
 #### 手动安装
 
