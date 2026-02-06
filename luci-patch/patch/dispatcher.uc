@@ -1042,10 +1042,12 @@ dispatch = function(_http, path) {
 				let auth_check = get_auth_challenge(user ?? 'root');
 				let auth_fields = null;
 				let auth_message = null;
+				let auth_html = null;
 
 				if (auth_check.pending) {
 					auth_fields = auth_check.fields;
 					auth_message = auth_check.message;
+					auth_html = auth_check.html;
 				}
 
 				if (user != null && pass != null)
@@ -1062,7 +1064,8 @@ dispatch = function(_http, path) {
 						duser: 'root',
 						fuser: user,
 						auth_fields: auth_fields,
-						auth_message: auth_message
+						auth_message: auth_message,
+						auth_html: auth_html
 					};
 					let theme_sysauth = `themes/${basename(runtime.env.media)}/sysauth`;
 
