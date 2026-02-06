@@ -72,8 +72,10 @@ echo "✓ Fix 2: Added auth_html to initial login scope"
 # Verify syntax
 echo ""
 echo "ℹ Verifying syntax..."
-if ucode -c "$DISP_FILE" 2>&1 | grep -q "Syntax error"; then
+SYNTAX_OUTPUT=$(ucode -c "$DISP_FILE" 2>&1)
+if echo "$SYNTAX_OUTPUT" | grep -q "Syntax error"; then
     echo "✗ Syntax error detected!"
+    echo "  $SYNTAX_OUTPUT"
     echo "  Restoring backup..."
     mv "${DISP_FILE}.captcha-fix-backup."* "$DISP_FILE" 2>/dev/null || true
     echo "✗ Fix failed - please report this issue"
