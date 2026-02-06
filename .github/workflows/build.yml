@@ -132,9 +132,12 @@ jobs:
 
             if [ "${{ github.ref_type }}" = "tag" ]; then
               # === 场景 A: Release Tag ===
+              # 支持任何版本号格式，包括 v0.0.1, v1.0.0, v2.3.4-beta 等
+              # Strip 'v' prefix from tag name (e.g., v1.0.0 -> 1.0.0, v0.0.1 -> 0.0.1)
               NEW_VER=$(echo "${{ github.ref_name }}" | sed 's/^v//')
               NEW_REL="1"
               echo "Build triggered by Tag: Using Version=$NEW_VER, Release=$NEW_REL"
+              echo "::notice::Building release version $NEW_VER from tag ${{ github.ref_name }}"
             else
               # === 场景 B: 普通 Commit (调试构建) ===
               # Version = 日期 (YYYY.MM.DD)
@@ -144,15 +147,22 @@ jobs:
               SHORT_SHA=$(git -C "$src_dir" rev-parse --short HEAD)
               NEW_REL="${{ github.run_number }}.git-$SHORT_SHA"
               echo "Build triggered by Commit: Using Version=$NEW_VER, Release=$NEW_REL"
+              echo "::notice::Building development snapshot version $NEW_VER-r$NEW_REL"
             fi
 
             # 动态注入版本号
             sed -i "s|include \$(TOPDIR)/rules.mk|include \$(TOPDIR)/rules.mk\nPKG_VERSION:=$NEW_VER\nPKG_RELEASE:=$NEW_REL|" "$TARGET_MK"
+            
+            # 验证注入结果
+            echo "::group::Makefile after PKG_VERSION injection"
+            grep -A 2 "include.*rules.mk" "$TARGET_MK" || true
+            echo "::endgroup::"
           fi
 
+          # 彻底清理旧的构建产物（包括所有子目录）
+          echo "Cleaning old build artifacts..."
+          rm -rf ./bin/packages/*
           mkdir -p ./bin/packages
-          find ./bin/packages -type f -name "${PACKAGE_NAME}*.ipk" -delete
-          find ./bin/packages -type f -name "${PACKAGE_NAME}*.apk" -delete
 
       - name: Compile the package
         working-directory: ${{ env.SDK_DIR }}
@@ -177,6 +187,9 @@ jobs:
             make defconfig
             make package/${PACKAGE_NAME}/compile V=sw -j$(nproc)
             mkdir -p output_ipk
+            echo "::group::Built IPK files"
+            find ./bin/packages -type f -name "*.ipk" -ls
+            echo "::endgroup::"
             find ./bin/packages -type f \( -name "${PACKAGE_NAME}*.ipk" -o -name "luci-i18n-${translation_pkg}-*.ipk" \) -exec cp {} output_ipk/ \;
           ) &
           pid_ipk=$!
@@ -195,6 +208,9 @@ jobs:
             if grep -q '^CONFIG_USE_APK=y' .config; then
               make package/${PACKAGE_NAME}/compile V=sw -j$(nproc)
               mkdir -p output_apk
+              echo "::group::Built APK files"
+              find ./bin/packages -type f -name "*.apk" -ls
+              echo "::endgroup::"
               find ./bin/packages -type f \( -name "${PACKAGE_NAME}*.apk" -o -name "luci-i18n-${translation_pkg}-*.apk" \) -exec cp {} output_apk/ \;
             else
               echo "::warning::CONFIG_USE_APK not supported by this SDK. Skipping."
@@ -219,6 +235,10 @@ jobs:
           mkdir -p "upload/${REL_PATH}"
           [ -d "output_ipk" ] && cp output_ipk/*.ipk "upload/${REL_PATH}/" || true
           [ -d "output_apk" ] && cp output_apk/*.apk "upload/${REL_PATH}/" || true
+          
+          echo "::group::Collected packages"
+          ls -lh upload/${REL_PATH}/*.ipk upload/${REL_PATH}/*.apk 2>/dev/null || echo "No packages found"
+          echo "::endgroup::"
 
           if [ -z "$(ls -A upload/${REL_PATH})" ]; then echo "No packages found!"; exit 1; fi
 
