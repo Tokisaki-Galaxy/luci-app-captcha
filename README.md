@@ -38,8 +38,22 @@ This package adds CAPTCHA verification to the LuCI web interface login, helping 
 
 ### 📸 Screenshots
 
-![CAPTCHA Settings Page](https://via.placeholder.com/800x400?text=CAPTCHA+Settings+Page)
-![Login with CAPTCHA](https://via.placeholder.com/400x300?text=Login+with+CAPTCHA)
+**CAPTCHA Settings Page:**
+
+![CAPTCHA Settings](https://github.com/user-attachments/assets/9c922b24-7522-4ab9-a185-833dfb7f845b)
+
+The CAPTCHA settings page allows administrators to:
+- Enable/disable CAPTCHA authentication
+- Choose CAPTCHA provider (Local SVG, Cloudflare Turnstile, hCaptcha)
+- Configure provider-specific settings
+- Preview the CAPTCHA appearance
+- Set up IP whitelisting and brute force protection
+
+**Login Page:**
+
+![Login Page](https://github.com/user-attachments/assets/ed135890-c646-4150-882d-6b20b785d373)
+
+Standard LuCI login interface. When CAPTCHA is enabled with the authentication plugin patches applied, a CAPTCHA challenge will appear below the password field.
 
 ### 📦 Installation
 
@@ -130,8 +144,22 @@ OpenWrt 的 LuCI CAPTCHA 验证应用。
 
 ### 📸 界面截图
 
-![CAPTCHA 设置页面](https://via.placeholder.com/800x400?text=CAPTCHA+设置页面)
-![带验证码的登录](https://via.placeholder.com/400x300?text=带验证码的登录)
+**CAPTCHA 设置页面：**
+
+![CAPTCHA 设置](https://github.com/user-attachments/assets/9c922b24-7522-4ab9-a185-833dfb7f845b)
+
+CAPTCHA 设置页面允许管理员：
+- 启用/禁用 CAPTCHA 验证
+- 选择 CAPTCHA 提供商（本地 SVG、Cloudflare Turnstile、hCaptcha）
+- 配置提供商特定的设置
+- 预览 CAPTCHA 外观
+- 设置 IP 白名单和暴力破解保护
+
+**登录页面：**
+
+![登录页面](https://github.com/user-attachments/assets/ed135890-c646-4150-882d-6b20b785d373)
+
+标准 LuCI 登录界面。当启用 CAPTCHA 并应用认证插件补丁后，密码字段下方将显示 CAPTCHA 挑战。
 
 ### 📦 安装方式
 
