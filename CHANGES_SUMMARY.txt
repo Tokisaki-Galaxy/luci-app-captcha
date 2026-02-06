@@ -1,0 +1,114 @@
+================================================================================
+GitHub Actions 构建问题修复总结 / Build Issues Fix Summary
+================================================================================
+
+问题描述 / Issues:
+1. 版本号 < 1.0.0 是否支持？/ Are versions < 1.0.0 supported?
+2. 为什么会生成两个不同版本的 IPK 文件？/ Why are two different version IPK files generated?
+
+================================================================================
+解决方案 / Solutions:
+================================================================================
+
+问题1 答案 / Issue 1 Answer:
+✅ 完全支持！/ Fully supported!
+
+工作流完全支持任何版本号格式，包括：
+The workflow fully supports any version format, including:
+  - v0.0.1 ✅
+  - v0.1.0 ✅
+  - v1.0.0 ✅
+  - v2.3.4-beta ✅
+
+已添加文档和注释说明 / Added documentation and comments to clarify this.
+
+--------------------------------------------------------------------------------
+
+问题2 修复 / Issue 2 Fix:
+✅ 已修复并添加调试功能 / Fixed with debugging enhancements
+
+根本原因 / Root Cause:
+- 构建产物清理不彻底 / Incomplete artifact cleanup
+- SDK 缓存污染 / SDK cache pollution  
+- 缺少调试日志 / Lack of debug logging
+
+修复内容 / Fixes:
+1. 改进清理逻辑 / Improved cleanup logic:
+   修改前 / Before: find ./bin/packages -type f -name "*.ipk" -delete
+   修改后 / After:   rm -rf ./bin/packages/* (with safety check)
+
+2. 添加调试日志 / Added debug logging:
+   - 版本注入验证 / Version injection validation
+   - 构建文件列表 / Built files listing
+   - 收集包显示 / Collected packages display
+
+3. 增强通知 / Enhanced notices:
+   - 显示正在构建的版本 / Show version being built
+
+================================================================================
+修改的文件 / Modified Files:
+================================================================================
+
+1. .github/workflows/build.yml (27 行变更 / 27 lines changed)
+   ✅ 改进构建产物清理 / Improved artifact cleanup
+   ✅ 添加调试日志组 / Added debug log groups
+   ✅ 双语注释 / Bilingual comments
+   ✅ 安全检查 / Safety checks
+
+2. BUILD_ACTION_ANALYSIS.md (新文件 / New file - 198 lines)
+   ✅ 详细技术分析 / Detailed technical analysis (Chinese)
+   ✅ 问题原因说明 / Root cause explanation
+   ✅ 解决方案文档 / Solution documentation
+
+3. 问题解答.md (新文件 / New file - 223 lines)
+   ✅ 用户友好的问答 / User-friendly Q&A (Chinese)
+   ✅ 使用说明 / Usage instructions
+   ✅ 测试建议 / Testing guidelines
+
+================================================================================
+测试验证 / Testing & Validation:
+================================================================================
+
+✅ YAML 语法验证通过 / YAML syntax validated
+✅ 版本提取逻辑测试通过 / Version extraction logic tested
+   - v0.0.1 → 0.0.1 ✅
+   - v0.1.0 → 0.1.0 ✅
+   - v1.0.0 → 1.0.0 ✅
+   - v2.0.0-beta → 2.0.0-beta ✅
+   - v10.20.30 → 10.20.30 ✅
+✅ 代码审查完成 / Code review completed
+✅ 安全检查添加 / Safety checks added
+⏳ 等待实际标签构建验证 / Awaiting real tag build verification
+
+================================================================================
+下一步操作 / Next Steps:
+================================================================================
+
+请创建测试标签来验证修复效果：
+Please create a test tag to verify the fixes:
+
+  git tag v0.0.1
+  git push origin v0.0.1
+
+  或 / Or:
+
+  git tag v1.0.0
+  git push origin v1.0.0
+
+然后检查 / Then check:
+1. GitHub Actions 日志中的新调试输出 / New debug output in Actions logs
+2. 确认只生成一个 IPK 文件 / Verify only one IPK file is created
+3. 版本号与标签匹配 / Version matches the tag
+
+================================================================================
+文档位置 / Documentation:
+================================================================================
+
+- 问题解答.md - 用户友好的解答 / User-friendly answers
+- BUILD_ACTION_ANALYSIS.md - 技术细节 / Technical details
+- .github/workflows/build.yml - 改进的工作流 / Improved workflow
+
+================================================================================
+总提交数 / Total Commits: 5
+总变更 / Total Changes: +449 -6 lines
+================================================================================
