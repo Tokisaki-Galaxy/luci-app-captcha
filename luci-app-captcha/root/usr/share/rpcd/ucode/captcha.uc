@@ -116,7 +116,7 @@ function generate_captcha_internal(length, noise, case_sensitive) {
 	};
 }
 
-return {
+const methods = {
 	getConfig: {
 		call: function() {
 			let ctx = uci.cursor();
@@ -351,3 +351,5 @@ return {
 		}
 	}
 };
+
+return { 'captcha': methods };

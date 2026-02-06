@@ -38,8 +38,22 @@ This package adds CAPTCHA verification to the LuCI web interface login, helping 
 
 ### 📸 Screenshots
 
-![CAPTCHA Settings Page](https://via.placeholder.com/800x400?text=CAPTCHA+Settings+Page)
-![Login with CAPTCHA](https://via.placeholder.com/400x300?text=Login+with+CAPTCHA)
+**CAPTCHA Settings Page:**
+
+![CAPTCHA Settings](https://github.com/user-attachments/assets/9c922b24-7522-4ab9-a185-833dfb7f845b)
+
+The CAPTCHA settings page allows administrators to:
+- Enable/disable CAPTCHA authentication
+- Choose CAPTCHA provider (Local SVG, Cloudflare Turnstile, hCaptcha)
+- Configure provider-specific settings
+- Preview the CAPTCHA appearance
+- Set up IP whitelisting and brute force protection
+
+**Login Page:**
+
+![Login Page](https://github.com/user-attachments/assets/ed135890-c646-4150-882d-6b20b785d373)
+
+Standard LuCI login interface. When CAPTCHA is enabled with the authentication plugin patches applied, a CAPTCHA challenge will appear below the password field.
 
 ### 📦 Installation
 
@@ -47,11 +61,23 @@ This plugin **requires the new authentication plugin mechanism** introduced in [
 
 If you are building your own LuCI, you can apply the patches from the [`luci-patch`](luci-patch/) directory, or if you have already installed [luci-app-2fa](https://github.com/Tokisaki-Galaxy/luci-app-2fa), the patches are already applied.
 
+> **⚠️ Important Prerequisites:** Before installing, you must install required packages including `ucode-mod-log`. See [INSTALLATION.md](INSTALLATION.md) for complete requirements.
+
 #### Manual Installation
 
-1. Download [Release package](https://github.com/Tokisaki-Galaxy/luci-app-captcha/releases)
-2. Upload the package to your OpenWrt system and install it
-3. Access LuCI and navigate to System → CAPTCHA Auth
+1. **Install Prerequisites:**
+   ```bash
+   opkg update
+   opkg install luci luci-base luci-compat luci-mod-admin-full luci-mod-system luci-theme-bootstrap ucode-mod-log
+   ```
+   
+2. Apply LuCI patches from [`luci-patch/`](luci-patch/) directory (see [Installation Guide](INSTALLATION.md))
+
+3. Download [Release package](https://github.com/Tokisaki-Galaxy/luci-app-captcha/releases)
+
+4. Upload the package to your OpenWrt system and install it
+
+5. Access LuCI and navigate to System → CAPTCHA Auth
 
 ### ⚙️ Configuration
 
@@ -118,8 +144,22 @@ OpenWrt 的 LuCI CAPTCHA 验证应用。
 
 ### 📸 界面截图
 
-![CAPTCHA 设置页面](https://via.placeholder.com/800x400?text=CAPTCHA+设置页面)
-![带验证码的登录](https://via.placeholder.com/400x300?text=带验证码的登录)
+**CAPTCHA 设置页面：**
+
+![CAPTCHA 设置](https://github.com/user-attachments/assets/9c922b24-7522-4ab9-a185-833dfb7f845b)
+
+CAPTCHA 设置页面允许管理员：
+- 启用/禁用 CAPTCHA 验证
+- 选择 CAPTCHA 提供商（本地 SVG、Cloudflare Turnstile、hCaptcha）
+- 配置提供商特定的设置
+- 预览 CAPTCHA 外观
+- 设置 IP 白名单和暴力破解保护
+
+**登录页面：**
+
+![登录页面](https://github.com/user-attachments/assets/ed135890-c646-4150-882d-6b20b785d373)
+
+标准 LuCI 登录界面。当启用 CAPTCHA 并应用认证插件补丁后，密码字段下方将显示 CAPTCHA 挑战。
 
 ### 📦 安装方式
 
@@ -127,11 +167,23 @@ OpenWrt 的 LuCI CAPTCHA 验证应用。
 
 如果你自行编译 LuCI，可以应用 [`luci-patch`](luci-patch/) 目录下的补丁文件，或者如果你已经安装了 [luci-app-2fa](https://github.com/Tokisaki-Galaxy/luci-app-2fa)，那么补丁已经被应用过了。
 
+> **⚠️ 重要前置条件：** 安装前必须先安装所需的软件包，包括 `ucode-mod-log`。详见 [INSTALLATION.md](INSTALLATION.md) 了解完整要求。
+
 #### 手动安装
 
-1. 下载 [Release package](https://github.com/Tokisaki-Galaxy/luci-app-captcha/releases)
-2. 将软件包上传到您的 OpenWrt 系统并安装
-3. 访问 LuCI 并导航到 系统 → CAPTCHA 验证
+1. **安装前置依赖包：**
+   ```bash
+   opkg update
+   opkg install luci luci-base luci-compat luci-mod-admin-full luci-mod-system luci-theme-bootstrap ucode-mod-log
+   ```
+   
+2. 从 [`luci-patch/`](luci-patch/) 目录应用 LuCI 补丁（参见 [安装指南](INSTALLATION.md)）
+
+3. 下载 [Release package](https://github.com/Tokisaki-Galaxy/luci-app-captcha/releases)
+
+4. 将软件包上传到您的 OpenWrt 系统并安装
+
+5. 访问 LuCI 并导航到 系统 → CAPTCHA 验证
 
 ### ⚙️ 配置步骤
 
