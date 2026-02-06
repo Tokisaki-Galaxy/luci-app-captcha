@@ -571,8 +571,7 @@ function get_auth_challenge(user) {
 					pending: true,
 					plugin: plugin,
 					fields: result.fields ?? [],
-					message: result.message ?? '',
-					html: result.html ?? ''
+					message: result.message ?? ''
 				};
 			}
 		}
@@ -1039,8 +1038,6 @@ dispatch = function(_http, path) {
 					pass = http.formvalue('luci_password');
 				}
 
-				// Check if 2FA is required for this user BEFORE validating password
-				// This allows us to show all required fields (password + OTP) on the same form
 				let auth_check = get_auth_challenge(user ?? 'root');
 				let auth_fields = null;
 				let auth_message = null;
@@ -1049,8 +1046,6 @@ dispatch = function(_http, path) {
 					auth_fields = auth_check.fields;
 					auth_message = auth_check.message;
 				}
-
-				let auth_html = auth_check.pending ? auth_check.html : null;
 
 				if (user != null && pass != null)
 					session = session_setup(user, pass, resolved.ctx.request_path);
@@ -1066,8 +1061,7 @@ dispatch = function(_http, path) {
 						duser: 'root',
 						fuser: user,
 						auth_fields: auth_fields,
-						auth_message: auth_message,
-						auth_html: auth_html
+						auth_message: auth_message
 					};
 					let theme_sysauth = `themes/${basename(runtime.env.media)}/sysauth`;
 
@@ -1083,8 +1077,6 @@ dispatch = function(_http, path) {
 					return runtime.render('sysauth', scope);
 				}
 
-				// Password is valid, now verify 2FA if required
-				// Use the authenticated username from the session to prevent bypass
 				let auth_user = session.data?.username;
 				if (!auth_user) {
 					auth_user = user;
@@ -1111,8 +1103,7 @@ dispatch = function(_http, path) {
 							auth_plugin: auth_check.plugin?.name,
 							auth_fields: auth_check.fields,
 							auth_message: auth_verify.message ?? auth_check.message,
-							auth_html: auth_check.html,
-							auth_failed: true
+							auth_html: auth_check.html
 						};
 
 						let theme_sysauth = `themes/${basename(runtime.env.media)}/sysauth`;
