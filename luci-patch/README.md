@@ -86,9 +86,52 @@ This patch adds a **generic, non-hardcoded authentication plugin mechanism** to 
 | `patch/luci-base.json` | `/usr/share/rpcd/acl.d/luci-base.json` |
 | `patch/view/system/exauth.js` | `/www/luci-static/resources/view/system/exauth.js` |
 
+## Prerequisites
+
+Before applying these patches, you **must** install the required LuCI packages and dependencies:
+
+```bash
+opkg update
+opkg install luci luci-base luci-compat luci-mod-admin-full luci-mod-system luci-theme-bootstrap ucode-mod-log
+```
+
+### Critical Dependency: `ucode-mod-log`
+
+⚠️ **IMPORTANT:** The `ucode-mod-log` package is **required** for the patched dispatcher to work. Without this package, LuCI will crash with the error:
+
+```
+Syntax error: Unable to resolve path for module 'log'
+```
+
+The patched `dispatcher.uc` uses the following import:
+```javascript
+import { openlog, syslog, closelog, LOG_INFO, LOG_WARNING, LOG_AUTHPRIV } from 'log';
+```
+
+This requires the `ucode-mod-log` package to be installed.
+
+### Package Explanations
+
+- **luci, luci-base**: Core LuCI framework
+- **luci-compat**: Compatibility layer for Lua-based LuCI apps
+- **luci-mod-admin-full, luci-mod-system**: System administration modules
+- **luci-theme-bootstrap**: Bootstrap theme (required for patched templates)
+- **ucode-mod-log**: Ucode logging module (**CRITICAL** - required by dispatcher patch)
+
 ## How to Apply
 
 ### For OpenWrt Online Patching
+
+**Step 1: Install Prerequisites**
+
+First, ensure all required packages are installed:
+
+```bash
+opkg update
+opkg install luci luci-base luci-compat luci-mod-admin-full luci-mod-system luci-theme-bootstrap ucode-mod-log
+```
+
+**Step 2: Apply Patches**
 
 Copy `patch` folder files to your OpenWrt system at the corresponding paths:
 
@@ -122,6 +165,51 @@ These patches are designed to work with:
 - LuCI from OpenWrt master branch
 
 The patches are identical to those in luci-app-2fa, ensuring compatibility when using both plugins together.
+
+## Troubleshooting
+
+### Error: "Unable to resolve path for module 'log'"
+
+**Symptom:** LuCI shows "Bad Gateway" error or dispatcher crashes with:
+```
+Syntax error: Unable to resolve path for module 'log'
+```
+
+**Solution:** Install the `ucode-mod-log` package:
+```bash
+opkg update
+opkg install ucode-mod-log
+```
+
+Then restart services:
+```bash
+rm -f /tmp/luci-indexcache*
+/etc/init.d/rpcd restart
+```
+
+### Patches Not Taking Effect
+
+**Symptom:** Authentication plugins still not working after applying patches.
+
+**Solution:**
+1. Verify all packages are installed (see Prerequisites section)
+2. Clear LuCI cache: `rm -f /tmp/luci-indexcache* /tmp/luci-modulecache/*`
+3. Restart rpcd: `/etc/init.d/rpcd restart`
+4. Check file permissions on patched files (should be readable by uhttpd)
+
+### Dispatcher Crashes After Patching
+
+**Symptom:** LuCI returns "Bad Gateway" or 502 errors.
+
+**Possible Causes:**
+1. Missing `ucode-mod-log` package (most common)
+2. Incorrect file paths when copying patches
+3. LuCI version incompatibility (patches tested with OpenWrt 23.05+)
+
+**Solution:**
+1. Install all prerequisite packages
+2. Verify patch files are in correct locations (see File Mapping section)
+3. Check LuCI version compatibility
 
 ## Related Projects
 

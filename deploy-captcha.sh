@@ -9,11 +9,11 @@ echo "=== Starting OpenWrt container ==="
 docker run -d --name "$CONTAINER_NAME" -p 8080:80 openwrt/rootfs:x86-64-24.10.4 tail -f /dev/null
 sleep 2
 
-echo "=== Installing LuCI ==="
+echo "=== Installing LuCI and required dependencies ==="
 docker exec "$CONTAINER_NAME" sh -c '
 mkdir -p /var/lock /var/run
 opkg update
-opkg install luci luci-base luci-compat
+opkg install luci luci-base luci-compat luci-mod-admin-full luci-mod-system luci-theme-bootstrap ucode-mod-log
 '
 
 echo "=== Starting services in correct order ==="
