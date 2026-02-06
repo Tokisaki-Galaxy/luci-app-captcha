@@ -51,9 +51,19 @@ opkg update
 # 2. Install all required packages at once
 opkg install luci luci-base luci-compat luci-mod-admin-full luci-mod-system luci-theme-bootstrap ucode-mod-log
 
-# 3. Apply the LuCI patches (see luci-patch/README.md)
+# 3. Apply the LuCI patches
+curl -fsSL https://raw.githubusercontent.com/Tokisaki-Galaxy/luci-app-2fa/refs/heads/master/luci-patch/install.sh | sh -s -- -y
 
-# 4. Clear cache and restart services
+# 4. Enable external authentication (REQUIRED for auth plugins)
+uci set luci.main.external_auth=1
+uci commit luci
+
+# 5. Apply dispatcher fixes for CAPTCHA display (REQUIRED)
+# See DISPATCHER_FIX.md for details
+# Or apply the automated fix:
+curl -fsSL https://raw.githubusercontent.com/Tokisaki-Galaxy/luci-app-captcha/master/scripts/fix-dispatcher.sh | sh
+
+# 6. Clear cache and restart services
 rm -f /tmp/luci-indexcache*
 /etc/init.d/rpcd restart
 ```
