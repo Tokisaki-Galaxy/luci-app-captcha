@@ -571,7 +571,8 @@ function get_auth_challenge(user) {
 					pending: true,
 					plugin: plugin,
 					fields: result.fields ?? [],
-					message: result.message ?? ''
+					message: result.message ?? '',
+					html: result.html ?? ''
 				};
 			}
 		}
@@ -1049,6 +1050,8 @@ dispatch = function(_http, path) {
 					auth_message = auth_check.message;
 				}
 
+				let auth_html = auth_check.pending ? auth_check.html : null;
+
 				if (user != null && pass != null)
 					session = session_setup(user, pass, resolved.ctx.request_path);
 
@@ -1063,7 +1066,8 @@ dispatch = function(_http, path) {
 						duser: 'root',
 						fuser: user,
 						auth_fields: auth_fields,
-						auth_message: auth_message
+						auth_message: auth_message,
+						auth_html: auth_html
 					};
 					let theme_sysauth = `themes/${basename(runtime.env.media)}/sysauth`;
 

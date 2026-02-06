@@ -28,7 +28,7 @@ var callSetConfig = rpc.declare({
 var callGenerateCaptcha = rpc.declare({
 	object: 'captcha',
 	method: 'generateCaptcha',
-	expect: { id: '', svg: '' }
+	expect: { }
 });
 
 var callGetRateLimitStatus = rpc.declare({

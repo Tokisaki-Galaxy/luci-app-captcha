@@ -217,6 +217,7 @@ function generate_local_captcha() {
 	let uci = require('uci');
 	let ctx = uci.cursor();
 	let fs = require('fs');
+	let rand = require('math').rand;
 	
 	let text_len = int(ctx.get('captcha', 'settings', 'local_length') || '4');
 	let noise = int(ctx.get('captcha', 'settings', 'local_noise') || '50');

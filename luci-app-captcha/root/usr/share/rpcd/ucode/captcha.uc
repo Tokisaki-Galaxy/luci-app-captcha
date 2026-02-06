@@ -7,6 +7,7 @@
 
 let uci = require('uci');
 let fs = require('fs');
+let rand = require('math').rand;
 
 const RATE_LIMIT_FILE = '/tmp/captcha_rate_limit.json';
 const CAPTCHA_STORE_FILE = '/tmp/captcha_store.json';
