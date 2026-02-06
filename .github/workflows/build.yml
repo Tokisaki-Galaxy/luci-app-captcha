@@ -150,16 +150,17 @@ jobs:
               echo "::notice::Building development snapshot version $NEW_VER-r$NEW_REL"
             fi
 
-            # 动态注入版本号
+            # 动态注入版本号 / Dynamically inject version numbers
             sed -i "s|include \$(TOPDIR)/rules.mk|include \$(TOPDIR)/rules.mk\nPKG_VERSION:=$NEW_VER\nPKG_RELEASE:=$NEW_REL|" "$TARGET_MK"
             
-            # 验证注入结果
+            # 验证注入结果 / Verify injection result
             echo "::group::Makefile after PKG_VERSION injection"
             grep -A 2 "include.*rules.mk" "$TARGET_MK" || true
             echo "::endgroup::"
           fi
 
           # 彻底清理旧的构建产物（包括所有子目录）
+          # Thoroughly clean old build artifacts (including all subdirectories)
           echo "Cleaning old build artifacts..."
           rm -rf ./bin/packages/*
           mkdir -p ./bin/packages
