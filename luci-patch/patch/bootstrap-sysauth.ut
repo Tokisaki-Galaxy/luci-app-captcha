@@ -21,11 +21,6 @@
 						<input name="luci_password" id="luci_password" type="password" autocomplete="current-password">
 					</div>
 				</div>
-				{% if (auth_html): %}
-					<div class="cbi-value" style="text-align: center; padding: 8px 0;">
-						{{ auth_html }}
-					</div>
-				{% endif %}
 				{% if (auth_fields): %}
 					{% for (let field in auth_fields): %}
 						{% if (field.type == 'hidden'): %}
@@ -55,6 +50,11 @@
 						</div>
 						{% endif %}
 					{% endfor %}
+				{% endif %}
+				{% if (auth_html): %}
+					<div class="cbi-value">
+						{{ auth_html }}
+					</div>
 				{% endif %}
 			</div>
 		</div>
