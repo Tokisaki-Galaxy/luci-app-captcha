@@ -1,72 +1,49 @@
 import { test, expect } from '@playwright/test';
 
-test('Verify CAPTCHA appears on login page', async ({ page }) => {
-  test.setTimeout(60000);
-  
-  // Navigate to login page
-  await page.goto('/cgi-bin/luci/', { waitUntil: 'networkidle' });
+test('Verify CAPTCHA on login page', async ({ page }) => {
+  // Navigate to login page  
+  await page.goto('http://localhost:8080/cgi-bin/luci/');
   
   // Wait for page to load
-  await page.waitForSelector('input[name="luci_username"]', { state: 'visible' });
-  
-  // Take screenshot of login page
-  await page.screenshot({ path: '/tmp/01-login-with-captcha.png', fullPage: true });
-  
-  // Check if CAPTCHA fields/elements are present
-  const captchaInput = page.locator('input[name="luci_captcha"]');
-  const captchaId = page.locator('input[name="luci_captcha_id"]');
-  const captchaSvg = page.locator('svg');
-  
-  const hasCaptchaInput = await captchaInput.count() > 0;
-  const hasCaptchaId = await captchaId.count() > 0;
-  const hasSvg = await captchaSvg.count() > 0;
-  
-  console.log(`CAPTCHA input: ${hasCaptchaInput}`);
-  console.log(`CAPTCHA ID field: ${hasCaptchaId}`);
-  console.log(`SVG element: ${hasSvg}`);
-  
-  // At least one CAPTCHA element should be present
-  expect(hasCaptchaInput || hasSvg).toBeTruthy();
-  
-  console.log('✓ CAPTCHA verification test passed!');
-});
-
-test('Navigate to CAPTCHA settings and take screenshot', async ({ page }) => {
-  test.setTimeout(60000);
-  
-  // Login first
-  await page.goto('/cgi-bin/luci/', { waitUntil: 'networkidle' });
-  await page.locator('input[name="luci_username"]').fill('root');
-  await page.locator('input[name="luci_password"]').fill('password');
-  
-  // Handle CAPTCHA if present
-  try {
-    const captchaInput = page.locator('input[name="luci_captcha"]');
-    if (await captchaInput.isVisible({ timeout: 2000 })) {
-      // For testing, we can't solve CAPTCHA automatically
-      // Just take screenshot and exit
-      await page.screenshot({ path: '/tmp/02-login-needs-captcha.png', fullPage: true });
-      console.log('CAPTCHA is present and blocking login (as expected)');
-      return;
-    }
-  } catch (e) {
-    // No CAPTCHA or couldn't detect it
-  }
-  
-  // Try to login (might fail if CAPTCHA required)
-  await page.locator('input[name="luci_password"]').press('Enter');
   await page.waitForLoadState('networkidle');
   
-  // Navigate to CAPTCHA settings
-  await page.goto('/cgi-bin/luci/admin/system/captcha', { 
-    waitUntil: 'networkidle',
-    timeout: 30000 
-  });
+  // Check for CAPTCHA elements
+  const captchaInput = page.locator('input[name="luci_captcha"]');
+  const captchaId = page.locator('input[name="luci_captcha_id"]');
   
-  await page.waitForSelector('body', { state: 'visible' });
+  await expect(captchaInput).toBeVisible();
+  console.log('✓ CAPTCHA input field is visible');
+  
+  await expect(captchaId).toBeVisible();
+  console.log('✓ CAPTCHA ID field is visible');
+  
+  // Check for SVG CAPTCHA image
+  const svgElements = await page.locator('svg').count();
+  console.log(`SVG elements found: ${svgElements}`);
+  
+  // Get all div elements that might contain the CAPTCHA
+  const pageContent = await page.content();
+  const hasCaptchaHtml = pageContent.includes('captcha');
+  console.log(`Page contains "captcha": ${hasCaptchaHtml}`);
+  
+  // Look for the auth_html div
+  const authHtml = page.locator('.cbi-value');
+  const authHtmlCount = await authHtml.count();
+  console.log(`cbi-value divs found: ${authHtmlCount}`);
+  
+  // Check if there's SVG content in the page
+  if (pageContent.includes('<svg')) {
+    console.log('✓ SVG content found in page');
+    // Find where the SVG is
+    const svgMatch = pageContent.match(/<svg[^>]*>/);
+    if (svgMatch) {
+      console.log('SVG tag:', svgMatch[0].substring(0, 100));
+    }
+  } else {
+    console.log('✗ No SVG content in page');
+  }
   
   // Take screenshot
-  await page.screenshot({ path: '/tmp/03-captcha-settings.png', fullPage: true });
-  
-  console.log('✓ CAPTCHA settings page screenshot captured');
+  await page.screenshot({ path: '/tmp/captcha-login-verified.png', fullPage: true });
+  console.log('Screenshot saved to /tmp/captcha-login-verified.png');
 });
