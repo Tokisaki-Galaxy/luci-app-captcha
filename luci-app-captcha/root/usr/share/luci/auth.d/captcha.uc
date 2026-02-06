@@ -552,21 +552,16 @@ return {
 				required: true,
 				fields: [
 					{
-						name: 'luci_captcha_id',
-						type: 'hidden',
-						value: captcha.id
-					},
-					{
 						name: 'luci_captcha',
 						type: 'text',
-						label: 'CAPTCHA',
+						label: 'Verification Code',
 						placeholder: 'Enter the code shown below',
 						autocomplete: 'off',
 						maxlength: 8,
 						required: true
 					}
 				],
-				html: captcha.svg,
+				html: sprintf('<input type="hidden" name="luci_captcha_id" value="%s" />', captcha.id) + captcha.svg,
 				message: 'Please enter the characters shown in the image.'
 			};
 		}

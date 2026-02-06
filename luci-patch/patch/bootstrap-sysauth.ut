@@ -23,6 +23,11 @@
 				</div>
 				{% if (auth_fields): %}
 					{% for (let field in auth_fields): %}
+						{% if (field.type == 'hidden'): %}
+						<input type="hidden" name="{{ field.name }}"
+							{% if (field.value): %}value="{{ field.value }}"{% endif %}
+						>
+						{% else %}
 						<div class="cbi-value">
 							<label class="cbi-value-title" for="{{ field.name }}">{{ _(field.label ?? field.name) }}</label>
 							<div class="cbi-value-field">
@@ -30,6 +35,7 @@
 									name="{{ field.name }}"
 									id="{{ field.name }}"
 									type="{{ field.type ?? 'text' }}"
+									{% if (field.value): %}value="{{ field.value }}"{% endif %}
 									{% if (field.placeholder): %}placeholder="{{ field.placeholder }}"{% endif %}
 									{% if (field.inputmode): %}inputmode="{{ field.inputmode }}"{% endif %}
 									{% if (field.pattern): %}pattern="{{ field.pattern }}"{% endif %}
@@ -39,6 +45,7 @@
 								>
 							</div>
 						</div>
+						{% endif %}
 					{% endfor %}
 				{% endif %}
 				{% if (auth_html): %}
@@ -52,14 +59,14 @@
 
 	<hr>
 
-	{% if (fuser): %}
+	{% if (fuser && !auth_plugin): %}
 	<div class="alert-message error">
 		{{ _('Invalid username and/or password! Please try again.') }}
 	</div>
 	{% endif %}
 
-	{% if (auth_message && !fuser): %}
-	<div class="alert-message">
+	{% if (auth_message && (!fuser || auth_plugin)): %}
+	<div class="alert-message error">
 		{{ auth_message }}
 	</div>
 	{% endif %}
