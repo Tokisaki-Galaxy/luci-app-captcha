@@ -68,11 +68,12 @@ function generate_captcha_internal(text_len, noise, case_sensitive) {
 	fs.writefile(CAPTCHA_STORE_FILE, sprintf('%J', captcha_store));
 	
 	// Generate SVG
-	let width = 150;
-	let height = 50;
-	let svg = sprintf('<svg xmlns="http://www.w3.org/2000/svg" width="%d" height="%d" viewBox="0 0 %d %d">', width, height, width, height);
+	let width = 200;
+	let height = 60;
+	let svg = sprintf('<svg xmlns="http://www.w3.org/2000/svg" width="%d" height="%d" viewBox="0 0 %d %d" style="display:block; margin:0 auto; border-radius:6px; box-shadow:0 1px 4px rgba(0,0,0,0.15);">', width, height, width, height);
 	
-	svg += sprintf('<rect width="%d" height="%d" fill="#f0f0f0"/>', width, height);
+	svg += '<defs><linearGradient id="captcha-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f8f9fa"/><stop offset="100%" stop-color="#e9ecef"/></linearGradient></defs>';
+	svg += sprintf('<rect width="%d" height="%d" rx="6" ry="6" fill="url(#captcha-bg)"/>', width, height);
 	
 	for (let i = 0; i < noise; i++) {
 		let x1 = rand() % width;
@@ -88,15 +89,15 @@ function generate_captcha_internal(text_len, noise, case_sensitive) {
 	let char_width = width / (text_len + 1);
 	for (let i = 0; i < text_len; i++) {
 		let char = substr(text, i, 1);
-		let x = (i + 0.5) * char_width + (rand() % 10) - 5;
-		let y = height / 2 + (rand() % 10) - 5;
-		let rotation = (rand() % 30) - 15;
-		let font_size = 20 + (rand() % 10);
-		let r = rand() % 100;
-		let g = rand() % 100;
-		let b = rand() % 100;
+		let x = (i + 0.5) * char_width + (rand() % 8) - 4;
+		let y = height / 2 + 6 + (rand() % 8) - 4;
+		let rotation = (rand() % 24) - 12;
+		let font_size = 26 + (rand() % 8);
+		let r = rand() % 80;
+		let g = rand() % 80;
+		let b = rand() % 80;
 		
-		svg += sprintf('<text x="%d" y="%d" font-family="monospace" font-size="%d" fill="rgb(%d,%d,%d)" transform="rotate(%d %d %d)">%s</text>',
+		svg += sprintf('<text x="%d" y="%d" font-family="\'Courier New\', monospace" font-size="%d" font-weight="bold" fill="rgb(%d,%d,%d)" transform="rotate(%d %d %d)">%s</text>',
 			int(x), int(y), font_size, r, g, b, rotation, int(x), int(y), char);
 	}
 	
