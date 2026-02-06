@@ -1,0 +1,17 @@
+Package: luci-app-captcha
+Version: 1.0.3-r1
+Depends: libc, luci-base
+Source: feeds/base/luci-app-captcha
+SourceName: luci-app-captcha
+License: Apache-2.0
+Section: luci
+SourceDateEpoch: 1758316778
+URL: https://github.com/openwrt/luci
+Maintainer: OpenWrt LuCI community
+Architecture: all
+Installed-Size: 61440
+Description:  LuCI CAPTCHA Authentication
+Filename: luci-app-captcha_1.0.3-r1_all.ipk
+Size: 10910
+SHA256sum: 1ed6e14a6a01867ca3c183a738b681fddb3e77ab082357ffcd123ba58041cda1
+
