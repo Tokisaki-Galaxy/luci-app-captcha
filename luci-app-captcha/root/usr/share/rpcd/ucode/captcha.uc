@@ -25,15 +25,15 @@ function save_rate_limit_state(state) {
 	fs.writefile(RATE_LIMIT_FILE, sprintf('%J', state));
 }
 
-function generate_captcha_internal(length, noise, case_sensitive) {
+function generate_captcha_internal(text_len, noise, case_sensitive) {
 	// Generate random text
 	let chars = case_sensitive ?
 		'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789' :
 		'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 	
 	let text = '';
-	for (let i = 0; i < length; i++) {
-		let idx = rand() % strlen(chars);
+	for (let i = 0; i < text_len; i++) {
+		let idx = rand() % length(chars);
 		text += substr(chars, idx, 1);
 	}
 	
@@ -84,8 +84,8 @@ function generate_captcha_internal(length, noise, case_sensitive) {
 		svg += sprintf('<line x1="%d" y1="%d" x2="%d" y2="%d" stroke="rgb(%d,%d,%d)" stroke-width="1" opacity="0.3"/>', x1, y1, x2, y2, r, g, b);
 	}
 	
-	let char_width = width / (length + 1);
-	for (let i = 0; i < length; i++) {
+	let char_width = width / (text_len + 1);
+	for (let i = 0; i < text_len; i++) {
 		let char = substr(text, i, 1);
 		let x = (i + 0.5) * char_width + (rand() % 10) - 5;
 		let y = height / 2 + (rand() % 10) - 5;

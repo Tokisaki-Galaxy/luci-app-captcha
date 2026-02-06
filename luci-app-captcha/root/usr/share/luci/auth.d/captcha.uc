@@ -218,7 +218,7 @@ function generate_local_captcha() {
 	let ctx = uci.cursor();
 	let fs = require('fs');
 	
-	let length = int(ctx.get('captcha', 'settings', 'local_length') || '4');
+	let text_len = int(ctx.get('captcha', 'settings', 'local_length') || '4');
 	let noise = int(ctx.get('captcha', 'settings', 'local_noise') || '50');
 	let case_sensitive = ctx.get('captcha', 'settings', 'local_case_sensitive') == '1';
 	
@@ -228,8 +228,8 @@ function generate_local_captcha() {
 		'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 	
 	let text = '';
-	for (let i = 0; i < length; i++) {
-		let idx = rand() % strlen(chars);
+	for (let i = 0; i < text_len; i++) {
+		let idx = rand() % length(chars);
 		text += substr(chars, idx, 1);
 	}
 	
@@ -284,8 +284,8 @@ function generate_local_captcha() {
 	}
 	
 	// Draw characters with distortion
-	let char_width = width / (length + 1);
-	for (let i = 0; i < length; i++) {
+	let char_width = width / (text_len + 1);
+	for (let i = 0; i < text_len; i++) {
 		let char = substr(text, i, 1);
 		let x = (i + 0.5) * char_width + (rand() % 10) - 5;
 		let y = height / 2 + (rand() % 10) - 5;
