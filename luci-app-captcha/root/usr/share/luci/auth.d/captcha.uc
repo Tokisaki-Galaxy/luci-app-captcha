@@ -560,7 +560,7 @@ return {
 						name: 'luci_captcha',
 						type: 'text',
 						label: 'CAPTCHA',
-						placeholder: 'Enter the code shown above',
+						placeholder: 'Enter the code shown below',
 						autocomplete: 'off',
 						maxlength: 8,
 						required: true
