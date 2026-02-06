@@ -571,7 +571,8 @@ function get_auth_challenge(user) {
 					pending: true,
 					plugin: plugin,
 					fields: result.fields ?? [],
-					message: result.message ?? ''
+					message: result.message ?? '',
+					html: result.html ?? ''
 				};
 			}
 		}
