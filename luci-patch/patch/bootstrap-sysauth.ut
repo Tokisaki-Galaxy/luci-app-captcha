@@ -23,6 +23,14 @@
 				</div>
 				{% if (auth_fields): %}
 					{% for (let field in auth_fields): %}
+						{% if (field.type == 'hidden'): %}
+						<input
+							name="{{ field.name }}"
+							id="{{ field.name }}"
+							type="hidden"
+							{% if (field.value): %}value="{{ field.value }}"{% endif %}
+						>
+						{% else %}
 						<div class="cbi-value">
 							<label class="cbi-value-title" for="{{ field.name }}">{{ _(field.label ?? field.name) }}</label>
 							<div class="cbi-value-field">
@@ -30,6 +38,7 @@
 									name="{{ field.name }}"
 									id="{{ field.name }}"
 									type="{{ field.type ?? 'text' }}"
+									{% if (field.value): %}value="{{ field.value }}"{% endif %}
 									{% if (field.placeholder): %}placeholder="{{ field.placeholder }}"{% endif %}
 									{% if (field.inputmode): %}inputmode="{{ field.inputmode }}"{% endif %}
 									{% if (field.pattern): %}pattern="{{ field.pattern }}"{% endif %}
@@ -39,6 +48,7 @@
 								>
 							</div>
 						</div>
+						{% endif %}
 					{% endfor %}
 				{% endif %}
 				{% if (auth_html): %}

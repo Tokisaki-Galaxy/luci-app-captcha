@@ -28,7 +28,7 @@ var callSetConfig = rpc.declare({
 var callGenerateCaptcha = rpc.declare({
 	object: 'captcha',
 	method: 'generateCaptcha',
-	expect: { id: '', svg: '' }
+	expect: { }
 });
 
 var callGetRateLimitStatus = rpc.declare({
@@ -62,7 +62,7 @@ var CBICaptchaPreview = form.DummyValue.extend({
 			return containerDiv;
 		}
 
-		var previewArea = E('div', { 'id': 'captcha-preview-area', 'style': 'margin: 10px 0; padding: 10px; border: 1px solid #ddd; background: #fafafa; text-align: center;' }, [
+		var previewArea = E('div', { 'id': 'captcha-preview-area', 'style': 'margin: 10px 0; padding: 16px; border: 1px solid #e0e0e0; background: #fafafa; text-align: center; border-radius: 6px;' }, [
 			E('em', {}, _('Click "Refresh Preview" to generate a test CAPTCHA'))
 		]);
 

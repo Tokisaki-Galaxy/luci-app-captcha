@@ -76,9 +76,7 @@ config core "main"
 	option lang "auto"
 	option mediaurlbase "/luci-static/bootstrap"
 	option resourcebase "/luci-static/resources"
-
-config internal "exauth"
-	option enabled "1"
+	option external_auth "1"
 
 config internal "themes"
 	option Bootstrap "/luci-static/bootstrap"
