@@ -177,6 +177,21 @@ jobs:
           cd ..
           SDK_DIR_NAME=$(basename ${{ env.SDK_DIR }})
           cp -al "$SDK_DIR_NAME" "${SDK_DIR_NAME}-apk"
+          
+          # 关键修复：打破硬链接，确保两个构建环境完全独立
+          # Critical fix: Break hard links to ensure completely independent build environments
+          
+          # 1. 删除并重新创建 bin/packages 目录（打破硬链接）
+          # Remove and recreate bin/packages directories (breaks hard links)
+          rm -rf "${SDK_DIR_NAME}-apk/bin/packages"
+          mkdir -p "${SDK_DIR_NAME}-apk/bin/packages"
+          rm -rf "${SDK_DIR_NAME}/bin/packages"
+          mkdir -p "${SDK_DIR_NAME}/bin/packages"
+          
+          # 2. 复制 package 目录内容而不是硬链接（防止构建过程相互干扰）
+          # Copy package directory content instead of hard-linking (prevents build interference)
+          rm -rf "${SDK_DIR_NAME}-apk/package/${PACKAGE_NAME}"
+          cp -r "${SDK_DIR_NAME}/package/${PACKAGE_NAME}" "${SDK_DIR_NAME}-apk/package/${PACKAGE_NAME}"
 
           # --- 1. 编译 IPK (后台运行) ---
           (
